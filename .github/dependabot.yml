@@ -1,0 +1,9 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"  # Specify that you're using GitHub Actions
+    directory: "/"  # Location of your action files
+    schedule:
+      interval: "weekly"  # Check for updates weekly
+    commit-message:
+      prefix: "fix"  # Prefix for commit messages
+    open-pull-requests-limit: 5  # Limit the number of open PRs
