@@ -1,7 +1,7 @@
 // parser.rs
 
 use serde_json::Error;
-use Gladys::models::UserStory;
+use domain::models::UserStory;
 
 pub fn parse_input(input: &str) -> Result<UserStory, Error> {
     serde_json::from_str(input)
