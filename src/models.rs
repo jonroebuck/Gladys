@@ -1,16 +1,18 @@
-#[derive(Debug)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct UserStory {
     pub description: String,
     pub test_cases: Vec<TestCase>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct TestCase {
-    pub name: String,
+    pub case: String,
     pub scenarios: Vec<TestScenario>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct TestScenario {
     pub scenario_type: String,
     pub given: String,
