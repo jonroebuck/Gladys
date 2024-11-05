@@ -1,7 +1,6 @@
-use serde_json::Error;
-
 use crate::models::UserStory;
+use std::error::Error;
 
-pub fn parse_input(input: &str) -> Result<UserStory, Error> {
-    serde_json::from_str(input)
+pub trait Parser {
+    fn parse_input(&self, input: &str) -> Result<UserStory, Box<dyn Error>>;
 }

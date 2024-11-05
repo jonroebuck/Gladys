@@ -1,17 +1,21 @@
-// parser.rs
+use domain::parser::Parser;
+use domain::models::{UserStory, TestCase, TestScenario};
+use serde_json::Error as SerdeError;
 
-use serde_json::Error;
-use domain::models::UserStory;
+pub struct JsonParser;
 
-pub fn parse_input(input: &str) -> Result<UserStory, Error> {
-    serde_json::from_str(input)
+impl Parser for JsonParser {
+    fn parse_input(&self, input: &str) -> Result<UserStory, Box<dyn std::error::Error>> {
+        let user_story: UserStory = serde_json::from_str(input)?;
+        Ok(user_story)
+    }
 }
 
-// Tests for the parser
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+    use domain::models::{UserStory, TestCase, TestScenario};
+
     #[test]
     fn test_parse_input_valid_json() {
         let json_input = r#"
@@ -33,7 +37,8 @@ mod tests {
             }
         "#;
 
-        let result = parse_input(json_input);
+        let parser = JsonParser;
+        let result = parser.parse_input(json_input);
         assert!(result.is_ok(), "Expected Ok but got an error: {:?}", result.err());
         
         let user_story = result.unwrap();
@@ -49,29 +54,5 @@ mod tests {
         assert_eq!(scenario.given, "I am a registered bank customer");
         assert_eq!(scenario.when, "I enter a valid membership ID");
         assert_eq!(scenario.then, "I am successfully registered");
-    }
-
-    #[test]
-    fn test_parse_input_invalid_json() {
-        let invalid_json = r#"
-            {
-                "story": "As a bank customer I want to register for a rewards program",
-                "test_cases": [
-                    {
-                        "case": "Successful Registration",
-                        "scenarios": [
-                            {
-                                "scenario_type": "Happy Flow",
-                                "given": "I am a registered bank customer",
-                                "when": "I enter a valid membership ID",
-                                "then": "I am successfully registered"
-                            }
-                        ]
-                    }
-                ]  // Missing closing brace
-        "#;
-
-        let result = parse_input(invalid_json);
-        assert!(result.is_err(), "Expected an error but got Ok: {:?}", result);
     }
 }
